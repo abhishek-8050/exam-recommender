@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Login / Register - Exam Recommender{% endblock %}
+
+{% block content %}
+<section class="auth-box">
+    <div class="tab-bar" id="authTabs">
+        <button type="button" class="tab-btn {{ 'active' if active_tab != 'register' }}" data-tab="loginPanel">Login</button>
+        <button type="button" class="tab-btn {{ 'active' if active_tab == 'register' }}" data-tab="registerPanel">Register</button>
+    </div>
+
+    <!-- Login form -->
+    <div class="tab-panel {{ 'active' if active_tab != 'register' }}" id="loginPanel">
+        <h2>Login</h2>
+        <form method="POST" action="{{ url_for('login') }}" data-validate novalidate>
+            <div class="form-row">
+                <label for="login_email">Email</label>
+                <input type="email" id="login_email" name="email" required>
+                <small class="error-text"></small>
+            </div>
+            <div class="form-row">
+                <label for="login_password">Password</label>
+                <input type="password" id="login_password" name="password" required>
+                <small class="error-text"></small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login</button>
+        </form>
+    </div>
+
+    <!-- Registration form -->
+    <div class="tab-panel {{ 'active' if active_tab == 'register' }}" id="registerPanel">
+        <h2>Create your account</h2>
+        <form method="POST" action="{{ url_for('register') }}" data-validate novalidate>
+            <div class="form-row">
+                <label for="full_name">Full name</label>
+                <input type="text" id="full_name" name="full_name" minlength="3" required>
+                <small class="error-text"></small>
+            </div>
+            <div class="form-row">
+                <label for="reg_email">Email</label>
+                <input type="email" id="reg_email" name="email" required>
+                <small class="error-text"></small>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="reg_password">Password</label>
+                    <input type="password" id="reg_password" name="password" minlength="6" required>
+                    <small class="error-text"></small>
+                </div>
+                <div class="form-row">
+                    <label for="confirm_password">Confirm password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" data-match="reg_password" required>
+                    <small class="error-text"></small>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="qualification">Highest qualification</label>
+                    <select id="qualification" name="qualification" required>
+                        <option value="">Select</option>
+                        <option value="10th">10th</option>
+                        <option value="12th">12th</option>
+                        <option value="Diploma/ITI">Diploma / ITI</option>
+                        <option value="Graduation">Graduation</option>
+                        <option value="Post-graduation">Post-graduation</option>
+                    </select>
+                    <small class="error-text"></small>
+                </div>
+                <div class="form-row">
+                    <label for="percentage">Percentage (%)</label>
+                    <input type="number" id="percentage" name="percentage" min="0" max="100" step="0.01" required>
+                    <small class="error-text"></small>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="14" max="60" required>
+                    <small class="error-text"></small>
+                </div>
+                <div class="form-row">
+                    <label for="category">Reservation category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select</option>
+                        <option value="General">General</option>
+                        <option value="OBC">OBC</option>
+                        <option value="SC">SC</option>
+                        <option value="ST">ST</option>
+                        <option value="EWS">EWS</option>
+                    </select>
+                    <small class="error-text"></small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label for="preferred_category_id">Preferred exam field</label>
+                <select id="preferred_category_id" name="preferred_category_id" required>
+                    <option value="">Select</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <small class="error-text"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Register</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

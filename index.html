@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Recommender - Find exams you can apply for{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Find the exams you can apply for</h1>
+    <p>
+        Exam Recommender collects your qualification, marks, age and interests,
+        checks them against each exam's eligibility rules, and lists the exams
+        that suit you best.
+    </p>
+    <div class="button-row">
+        <a class="btn btn-primary" href="{{ url_for('exams') }}">Explore Exams</a>
+        {% if not current_user %}
+            <a class="btn btn-outline" href="{{ url_for('auth') }}">Create account</a>
+        {% else %}
+            <a class="btn btn-outline" href="{{ url_for('dashboard') }}">Go to dashboard</a>
+        {% endif %}
+    </div>
+    <p class="hero-note">{{ total_exams }} exams listed across {{ categories|length }} categories.</p>
+</section>
+
+<section class="section">
+    <h2>How it works</h2>
+    <div class="grid grid-3">
+        <div class="card">
+            <h3>1. Enter your details</h3>
+            <p>Register with your qualification, percentage, age, reservation category and the field you prefer.</p>
+        </div>
+        <div class="card">
+            <h3>2. Eligibility is checked</h3>
+            <p>Your details are compared with each exam's minimum qualification, percentage and age limits.</p>
+        </div>
+        <div class="card">
+            <h3>3. Get recommendations</h3>
+            <p>Eligible exams get a match score, so the ones closest to your preference appear first.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Browse by category</h2>
+    {% if categories %}
+        <div class="chip-row">
+            {% for category in categories %}
+                <a class="chip" href="{{ url_for('exams', category=category.id) }}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="muted">No categories have been added yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

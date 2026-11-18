@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Exam Recommender{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ student.full_name }}</h1>
+
+<div class="grid grid-2 dashboard-top">
+    <section class="card">
+        <h2>Your details</h2>
+        <table class="info-table">
+            <tr><th>Email</th><td>{{ student.email }}</td></tr>
+            <tr><th>Qualification</th><td>{{ student.qualification }}</td></tr>
+            <tr><th>Percentage</th><td>{{ student.percentage }}%</td></tr>
+            <tr><th>Age</th><td>{{ student.age }}</td></tr>
+            <tr><th>Category</th><td>{{ student.category }}</td></tr>
+            <tr><th>Preferred field</th><td>{{ preferred_category or 'Not selected' }}</td></tr>
+        </table>
+    </section>
+
+    <section class="card summary-card">
+        <h2>Summary</h2>
+        <p class="big-number">{{ recommended_exams|length }}</p>
+        <p>exams match your profile.</p>
+        <a class="btn btn-outline btn-small" href="{{ url_for('exams') }}">Browse all exams</a>
+    </section>
+</div>
+
+<section class="section">
+    <h2>Recommended exams</h2>
+    <p class="muted">Only exams you are eligible for are shown. A higher score means a closer match to your preferred field and marks.</p>
+
+    {% if recommended_exams %}
+        <div class="grid grid-3">
+            {% for exam in recommended_exams %}
+                <article class="card">
+                    <span class="badge">{{ exam.category_name }}</span>
+                    <h3>{{ exam.name }}</h3>
+                    <label class="score-label" for="score-{{ exam.id }}">Match score: {{ exam.score }}%</label>
+                    <progress id="score-{{ exam.id }}" value="{{ exam.score }}" max="100">{{ exam.score }}%</progress>
+                    <ul class="meta-list">
+                        <li>Exam date: {{ exam.exam_date.strftime('%d %b %Y') if exam.exam_date else 'Not announced' }}</li>
+                        <li>Apply by: {{ exam.application_deadline.strftime('%d %b %Y') if exam.application_deadline else 'Not announced' }}</li>
+                    </ul>
+                    <a class="btn btn-primary btn-small" href="{{ url_for('exam_details', exam_id=exam.id) }}">View details</a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-message">No exams match your profile right now. Check the full exam list to see other options.</p>
+    {% endif %}
+</section>
+{% endblock %}
